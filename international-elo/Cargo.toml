@@ -1,0 +1,15 @@
+[package]
+name = "international-elo"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+worker = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+strsim = { workspace = true }
+shared-core = { workspace = true }
+getrandom = { workspace = true }
+
+[lib]
+crate-type = ["cdylib"]

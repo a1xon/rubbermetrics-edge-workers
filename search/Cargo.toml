@@ -1,0 +1,12 @@
+[package]
+name = "search"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+worker = { workspace = true }
+serde = { workspace = true }
+shared-core = { workspace = true }
+
+[lib]
+crate-type = ["cdylib"]

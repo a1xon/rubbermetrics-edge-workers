@@ -1,0 +1,25 @@
+# Rust
+/target
+Cargo.lock
+
+# Cloudflare / Wrangler
+.wrangler
+.dev.vars
+dist
+build
+node_modules
+
+# Environment
+.env
+.env.*
+!.env.template
+
+# IDEs
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,21 @@
+[workspace]
+resolver = "2"
+members = ["search", "flightcurve", "international-elo", "shared-core"]
+
+[workspace.dependencies]
+worker = { version = "0.7.5", features = ["http"] } 
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+strsim = "0.11"
+shared-core = { path = "./shared-core" }
+getrandom = { version = "0.2", features = ["js"] }
+
+[profile.release]
+opt-level = 3        # Maximum optimization for performance
+lto = "fat"          # Full Link-Time Optimization (cross-crate)
+codegen-units = 1    # Single codegen unit for maximal optimization
+panic = "abort"      # Reduce binary size and remove unwinding overhead
+strip = "symbols"    # Remove symbols to minimize binary footprint (faster loading)
+incremental = false  # Disable incremental compilation for better optimization
+overflow-checks = false # Disable overflow checks for extra speed
+debug = false        # Ensure no debug symbols are included

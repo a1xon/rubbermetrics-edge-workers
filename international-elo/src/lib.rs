@@ -152,7 +152,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
     }
 
     let is_numeric = q.chars().all(|c| c.is_ascii_digit());
-    let mut results: Vec<&Player> = Vec::with_capacity(5);
+    let mut results: Vec<&Player> = Vec::with_capacity(3);
 
     if is_numeric {
         // ID Search Strategy
@@ -162,7 +162,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
             for indexed in db.players.iter() {
                 if indexed.original.member_id.starts_with(q) {
                     results.push(&indexed.original);
-                    if results.len() >= 5 { break; }
+                    if results.len() >= 3 { break; }
                 }
             }
         }
@@ -197,9 +197,10 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 
         // Satisfaction Guardrail: If no perfect match found via index, fallback to full scan.
         if scored_results.len() < 3 || top_indexed_score < 0.95 {
+            let candidate_set: std::collections::HashSet<u32> = candidate_indices.iter().copied().collect();
             let mut full_scan: Vec<ScoredPlayer> = db.players.iter()
                 .enumerate()
-                .filter(|(idx, _)| !candidate_indices.contains(&(*idx as u32)))
+                .filter(|(idx, _)| !candidate_set.contains(&(*idx as u32)))
                 .map(|(_, indexed)| ScoredPlayer {
                     player: &indexed.original,
                     score: score_match(&query_tokens, &indexed.tokens),
@@ -213,7 +214,7 @@ pub async fn main(req: Request, _env: Env, _ctx: worker::Context) -> Result<Resp
 
         if let Some(first) = scored_results.first() {
             let top_score = first.score;
-            for sp in scored_results.into_iter().take(5) {
+            for sp in scored_results.into_iter().take(3) {
                 if (top_score - sp.score) <= 0.3 {
                     results.push(sp.player);
                 } else {

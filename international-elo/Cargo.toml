@@ -13,3 +13,10 @@ getrandom = { workspace = true }
 
 [lib]
 crate-type = ["cdylib"]
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+
+[[bench]]
+name = "search_bench"
+harness = false
